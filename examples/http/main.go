@@ -19,7 +19,7 @@ func main() {
 		c.String(200, "OK")
 	})
 
-	users := user.New(user.LocalStorage{})
+	users := user.New(user.NewLocalStorage())
 	handlers := webusers.Handlers{Users: users}
 
 	r.GET("/signup", gin.WrapF(handlers.SignUp))

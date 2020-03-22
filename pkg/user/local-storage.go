@@ -11,6 +11,14 @@ type LocalStorage struct {
 	idxID       map[ID]*User
 }
 
+func NewLocalStorage() *LocalStorage {
+	return &LocalStorage{
+		users:       0,
+		idxUsername: make(map[string]*User),
+		idxID:       make(map[ID]*User),
+	}
+}
+
 func (l LocalStorage) Create(user User) (*User, error) {
 	if _, ok := l.idxUsername[user.Username]; ok {
 		return nil, ErrUserExists
