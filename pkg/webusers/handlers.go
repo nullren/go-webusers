@@ -22,7 +22,14 @@ func (h Handlers) SignUp(w http.ResponseWriter, r *http.Request) {
 			fail(w, err)
 			return
 		}
-		log.Printf("read user: %q, pass: %q\n", username, password)
+		newUser, err := h.Users.SignUp(username, password)
+		if err != nil {
+			fail(w, err)
+			return
+		}
+		log.Printf("created user: %s", newUser)
+		http.Redirect(w, r, "/settings", 301)
+		return
 	}
 	render(w, "signup.html")
 }
@@ -34,7 +41,14 @@ func (h Handlers) Login(w http.ResponseWriter, r *http.Request) {
 			fail(w, err)
 			return
 		}
-		log.Printf("read user: %q, pass: %q\n", username, password)
+		loggedIn, err := h.Users.Login(username, password)
+		if err != nil {
+			fail(w, err)
+			return
+		}
+		log.Printf("created user: %s", loggedIn)
+		http.Redirect(w, r, "/settings", 301)
+		return
 	}
 	render(w, "login.html")
 }

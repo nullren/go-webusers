@@ -1,6 +1,10 @@
 package user
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"fmt"
+
+	"golang.org/x/crypto/bcrypt"
+)
 
 type ID uint64
 
@@ -8,6 +12,10 @@ type User struct {
 	ID           ID
 	Username     string
 	PasswordHash []byte
+}
+
+func (u User) String() string {
+	return fmt.Sprintf("<user ID:%d>", u.ID)
 }
 
 type ComparePasswordHash func([]byte) error
