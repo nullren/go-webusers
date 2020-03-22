@@ -12,6 +12,10 @@ import (
 func main() {
 	r := gin.Default()
 
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "OK")
+	})
+
 	r.GET("/signup", gin.WrapF(webusers.Signup))
 	r.POST("/signup", gin.WrapF(webusers.Signup))
 
