@@ -7,9 +7,15 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/nullren/go-webusers/pkg/user"
 )
 
-func Signup(w http.ResponseWriter, r *http.Request) {
+type Handlers struct {
+	Users *user.Controller
+}
+
+func (h Handlers) SignUp(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		username, password, err := readAuth(r)
 		if err != nil {
@@ -21,7 +27,7 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 	render(w, "signup.html")
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func (h Handlers) Login(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		username, password, err := readAuth(r)
 		if err != nil {
@@ -33,7 +39,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	render(w, "login.html")
 }
 
-func Settings(w http.ResponseWriter, r *http.Request) {
+func (h Handlers) Settings(w http.ResponseWriter, r *http.Request) {
 	render(w, "settings.html")
 }
 

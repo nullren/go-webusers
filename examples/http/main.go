@@ -8,6 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"github.com/nullren/go-webusers/pkg/user"
 	"github.com/nullren/go-webusers/pkg/webusers"
 )
 
@@ -18,13 +19,16 @@ func main() {
 		c.String(200, "OK")
 	})
 
-	r.GET("/signup", gin.WrapF(webusers.Signup))
-	r.POST("/signup", gin.WrapF(webusers.Signup))
+	users := user.New(user.LocalStorage{})
+	handlers := webusers.Handlers{Users: users}
 
-	r.GET("/login", gin.WrapF(webusers.Login))
-	r.POST("/login", gin.WrapF(webusers.Login))
+	r.GET("/signup", gin.WrapF(handlers.SignUp))
+	r.POST("/signup", gin.WrapF(handlers.SignUp))
 
-	r.GET("/settings", gin.WrapF(webusers.Settings))
+	r.GET("/login", gin.WrapF(handlers.Login))
+	r.POST("/login", gin.WrapF(handlers.Login))
+
+	r.GET("/settings", gin.WrapF(handlers.Settings))
 
 	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
 	log.Fatal(http.ListenAndServe(addr, r))
