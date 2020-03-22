@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -24,5 +26,6 @@ func main() {
 
 	r.GET("/settings", gin.WrapF(webusers.Settings))
 
-	log.Fatal(http.ListenAndServe(":3000", r))
+	addr := fmt.Sprintf(":%s", os.Getenv("PORT"))
+	log.Fatal(http.ListenAndServe(addr, r))
 }
