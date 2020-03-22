@@ -1,6 +1,7 @@
 package webusers
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -9,15 +10,46 @@ import (
 )
 
 func Signup(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		username, password, err := readAuth(r)
+		if err != nil {
+			fail(w, err)
+			return
+		}
+		log.Printf("read user: %q, pass: %q\n", username, password)
+	}
 	render(w, "signup.html")
 }
 
 func Login(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		username, password, err := readAuth(r)
+		if err != nil {
+			fail(w, err)
+			return
+		}
+		log.Printf("read user: %q, pass: %q\n", username, password)
+	}
 	render(w, "login.html")
 }
 
 func Settings(w http.ResponseWriter, r *http.Request) {
 	render(w, "settings.html")
+}
+
+func fail(w http.ResponseWriter, err error) {
+	log.Printf("failure: %s\n", err)
+	w.WriteHeader(http.StatusInternalServerError)
+	_, _ = w.Write([]byte(fmt.Sprintf("500 - %s", err)))
+}
+
+func readAuth(r *http.Request) (string, string, error) {
+	if err := r.ParseForm(); err != nil {
+		return "", "", err
+	}
+	username := r.PostForm.Get("username")
+	password := r.PostForm.Get("password")
+	return username, password, nil
 }
 
 func render(w http.ResponseWriter, fileName string) {
@@ -42,4 +74,3 @@ func render(w http.ResponseWriter, fileName string) {
 		_, _ = w.Write([]byte("500 - Something bad happened!"))
 	}
 }
-
