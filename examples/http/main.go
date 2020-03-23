@@ -47,6 +47,7 @@ func AuthenticationRequired(h webusers.Handlers) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		if u := h.Sessions.Read(c.Request); u == nil {
 			c.String(401, "unauthorized :(")
+			c.Abort()
 			return
 		}
 		c.Next()
