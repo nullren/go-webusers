@@ -50,7 +50,7 @@ func (h Handlers) Login(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Printf("logged in user: %s", loggedIn)
-		h.Sessions.Write(w, newUser)
+		h.Sessions.Write(w, loggedIn)
 		http.Redirect(w, r, "/settings", 301)
 		return
 	}
