@@ -8,11 +8,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/nullren/go-webusers/pkg/session"
 	"github.com/nullren/go-webusers/pkg/user"
 )
 
 type Handlers struct {
-	Users *user.Controller
+	Users    *user.Controller
+	Sessions *session.Controller
 }
 
 func (h Handlers) SignUp(w http.ResponseWriter, r *http.Request) {
@@ -28,6 +30,7 @@ func (h Handlers) SignUp(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		log.Printf("created user: %s", newUser)
+		h.Sessions.Write(w, newUser)
 		http.Redirect(w, r, "/settings", 301)
 		return
 	}
@@ -46,7 +49,8 @@ func (h Handlers) Login(w http.ResponseWriter, r *http.Request) {
 			fail(w, err)
 			return
 		}
-		log.Printf("created user: %s", loggedIn)
+		log.Printf("logged in user: %s", loggedIn)
+		h.Sessions.Write(w, newUser)
 		http.Redirect(w, r, "/settings", 301)
 		return
 	}

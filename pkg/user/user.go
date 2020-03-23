@@ -12,6 +12,7 @@ type User struct {
 	ID           ID
 	Username     string
 	PasswordHash []byte
+	SessionKey   string
 }
 
 func (u User) String() string {
@@ -39,7 +40,6 @@ func (c *Controller) SignUp(username, password string) (*User, error) {
 		return nil, err
 	}
 	return c.dao.Create(User{
-		ID:           0,
 		Username:     username,
 		PasswordHash: pwdHash,
 	})
@@ -51,8 +51,6 @@ func (c *Controller) Login(username, password string) (*User, error) {
 	}
 
 	return c.dao.Auth(User{
-		ID:           0,
-		Username:     username,
-		PasswordHash: nil,
+		Username: username,
 	}, compare)
 }
